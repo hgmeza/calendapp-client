@@ -1,0 +1,30 @@
+.pageContainer {
+  padding-top: 4em;
+}
+
+.container {
+  padding-top: 2em;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 4em;
+}
+
+.textfieldContainer {
+  width: 100%;
+  padding-top: 2em;
+  .textfield {
+    width: inherit;
+  }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 740px) {
+  .pageContainer {
+    padding-top: 3em;
+  }
+  .container {
+    padding-top: 2em;
+  }
+}
