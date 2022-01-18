@@ -88,7 +88,7 @@ const Home = () => {
           </Typography>
         </div>
         <Typography variant="subtitle1" component="div">
-          Book your next appointment by finding your provider below
+          Reserva tu próxima cita seleccionando la especialidad
         </Typography>
         <div className={styles.textfieldContainer}>
           <Autocomplete
@@ -97,17 +97,17 @@ const Home = () => {
             renderInput={params => (
               <TextField
                 {...params}
-                label={isLoading ? "Loading..." : "Search by specialty"}
+                label={isLoading ? "Cargando..." : "Busca por especialidad"}
               />
             )}
           />
         </div>
         <div className={styles.container}>
           <LoadingButton
-            disabled={!specialty}
+            disabled={!specialty || hello.isLoading}
             variant="contained"
             endIcon={<Search />}
-            loading={isLoading}
+            loading={isLoading || hello.isLoading}
             loadingPosition="end"
             onClick={onSearch}
           >

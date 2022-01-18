@@ -1,7 +1,6 @@
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { CalendarPicker, LocalizationProvider } from "@mui/lab";
 import {
-  Alert,
   Backdrop,
   Box,
   Button,
@@ -11,25 +10,28 @@ import {
   Container,
   FormControlLabel,
   Grid,
-  Modal,
-  Snackbar,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import React, { FormEvent, useEffect, useMemo, useState } from "react";
 import { useSearch, useNavigate } from "react-location";
 import { useGetProvider } from "../../hooks/useGetSpecialties";
 
 import styles from "./Book.module.scss";
+import TextInput from "./components/TextInput";
+import BookConfirmation from "./components/BookConfirmation";
+import NotificationBar from "../../components/NotificationBar";
 
-type UserInfo = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  city: string;
-  state: string;
+type UserData = {
+  label: string;
+  value: string;
+};
+
+export type UserInfo = {
+  firstName: UserData;
+  lastName: UserData;
+  email: UserData;
+  phone: UserData;
 };
 
 const Book = () => {
@@ -56,15 +58,27 @@ const Book = () => {
 
   const defaultUserInfo: UserInfo = useMemo(
     () => ({
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      city: "",
-      state: "",
+      firstName: {
+        label: "Nombre",
+        value: "",
+      },
+      lastName: {
+        label: "Apellido",
+        value: "",
+      },
+      email: {
+        label: "Correo Electrónico",
+        value: "",
+      },
+      phone: {
+        label: "Numbero Móvil",
+        value: "",
+      },
     }),
     [],
   );
+
+  const requiredInfo = ["firstName", "lastName", "email"];
 
   useEffect(() => {
     if (isConfirmed) {
@@ -90,9 +104,13 @@ const Book = () => {
   };
 
   const onChange = (key: keyof UserInfo, value: string) => {
+    console.log(key, value);
     setUserInfo({
       ...userInfo,
-      [key]: value,
+      [key]: {
+        ...userInfo[key],
+        value: value,
+      },
     });
   };
   const onClick = (idx: number) => {
@@ -107,28 +125,6 @@ const Book = () => {
   const handleClose = () => {
     setIsConfirmed(false);
     setIsError(false);
-  };
-  const style = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    minWidth: 250,
-    maxWidth: 500,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
-  const dateOptions = {
-    weekday: "long" as "long",
-    year: "numeric" as "numeric",
-    month: "long" as "long",
-    day: "numeric" as "numeric",
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
   };
 
   const onConfirm = () => {
@@ -145,8 +141,8 @@ const Book = () => {
       </Backdrop>
       <Container maxWidth="xl">
         <div className={styles.title}>
-          <Typography variant="h5" component="div">
-            Book your appointment
+          <Typography variant="h4" component="div">
+            Selecciona tu cita
           </Typography>
           <Typography variant="subtitle1" component="div">
             {specialty} - {provider}
@@ -163,7 +159,7 @@ const Book = () => {
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              Select time
+              Selecciona la hora
               <Stack direction="row" spacing={1} style={{ flexWrap: "wrap" }}>
                 {data?.availability.map((time, idx) => {
                   return (
@@ -190,7 +186,9 @@ const Book = () => {
         <div>
           <Grid container spacing={2}>
             <Grid item xs={12} md={9}>
-              <h1>Your information</h1>
+              <Typography variant="h4" component="div">
+                Tu Información
+              </Typography>
               <Box
                 component="form"
                 sx={{
@@ -200,64 +198,24 @@ const Book = () => {
                 autoComplete="off"
                 onSubmit={onSubmit}
               >
-                <TextField
-                  required
-                  id="firstName"
-                  label="First Name"
-                  variant="standard"
-                  value={userInfo.firstName}
-                  onChange={event => onChange("firstName", event.target.value)}
-                  className={styles.textfield}
-                />
-                <TextField
-                  required
-                  id="lastName"
-                  label="Last Name"
-                  variant="standard"
-                  value={userInfo.lastName}
-                  onChange={event => onChange("lastName", event.target.value)}
-                  className={styles.textfield}
-                />
-                <br />
-                <TextField
-                  required
-                  id="email"
-                  label="email"
-                  type="email"
-                  variant="standard"
-                  value={userInfo.email}
-                  onChange={event => onChange("email", event.target.value)}
-                  className={styles.textfield}
-                />
-                <TextField
-                  id="phone"
-                  label="phone"
-                  variant="standard"
-                  value={userInfo.phone}
-                  onChange={event => onChange("phone", event.target.value)}
-                  className={styles.textfield}
-                />
-                <br />
-                <TextField
-                  id="city"
-                  label="city"
-                  variant="standard"
-                  value={userInfo.city}
-                  onChange={event => onChange("city", event.target.value)}
-                  className={styles.textfield}
-                />
-                <TextField
-                  id="state"
-                  label="state"
-                  variant="standard"
-                  value={userInfo.state}
-                  onChange={event => onChange("state", event.target.value)}
-                  className={styles.textfield}
-                />
-                <br />
+                {Object.keys(userInfo).map((key, idx) => {
+                  const keyData = userInfo[key as keyof UserInfo];
+                  return (
+                    <React.Fragment key={`user-info-${idx}`}>
+                      <TextInput
+                        label={keyData.label}
+                        userKey={key as keyof UserInfo}
+                        value={keyData.value}
+                        onChange={onChange}
+                        required={requiredInfo.includes(key)}
+                      />
+                    </React.Fragment>
+                  );
+                })}
+
                 <FormControlLabel
                   control={<Checkbox />}
-                  label="This is my first time"
+                  label="Es mi primera vez"
                 />
                 <br />
                 <Button
@@ -265,60 +223,26 @@ const Book = () => {
                   variant="contained"
                   style={{ marginBottom: "5em" }}
                 >
-                  SUBMIT
+                  Verificar
                 </Button>
               </Box>
             </Grid>
           </Grid>
         </div>
-        <Modal open={isOpen}>
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Confirm Appointment Information
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              <div>
-                Date of your appointment:{" "}
-                <i>{date?.toLocaleDateString("en-US", dateOptions)}</i>
-              </div>
-              <div>
-                Time of your appointment:{" "}
-                <i>{data?.availability[selected || 0]}</i>
-              </div>
-
-              <div>
-                First name: <i>{userInfo.firstName}</i>
-              </div>
-              <div>
-                Last name: <i>{userInfo.lastName}</i>
-              </div>
-              <div>
-                Email:<i> {userInfo.email}</i>
-              </div>
-              <div>
-                Phone: <i>{userInfo.phone}</i>
-              </div>
-              <div>
-                City: <i>{userInfo.city}</i>
-              </div>
-              <div>
-                State: <i>{userInfo.state}</i>
-              </div>
-            </Typography>
-            <Button variant="contained" color="error" onClick={closeModal}>
-              Cancel
-            </Button>
-            <Button variant="contained" color="primary" onClick={onConfirm}>
-              Confirm
-            </Button>
-          </Box>
-        </Modal>
       </Container>
-      <Snackbar open={isError} autoHideDuration={4000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-          Please select a date.
-        </Alert>
-      </Snackbar>
+      <BookConfirmation
+        date={date}
+        isOpen={isOpen}
+        onCloseModal={() => setIsOpen(false)}
+        onConfirm={onConfirm}
+        userInfo={userInfo}
+      />
+      <NotificationBar
+        isOpen={isError}
+        onClose={handleClose}
+        message="Tienes que seleccionar una hora."
+        type="error"
+      />
     </>
   );
 };
