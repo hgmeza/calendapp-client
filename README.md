@@ -1,46 +1,34 @@
-# Getting Started with Create React App
+# Calendapp Client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Still a work in progress. Its main intention is to build an app that allows you to book doctors appointments. The main target audience is Latin America, so you will see some mix of Spanish and English here and there while this is being built.
 
-## Available Scripts
+## Demo
 
-In the project directory, you can run:
+Check the live demo <a href="https://d284c5mvune0v7.cloudfront.net/">here</a>
 
-### `yarn start`
+## Views
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Home Page
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Initial View
+<img src="./readmedata/initial-view.png" width="100%" />
 
-### `yarn test`
+Selecting a Provider
+<img src="./readmedata/view-selecting-doctor.png" width="100%" />
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Book Page
 
-### `yarn build`
+Initial View
+<img src="./readmedata/view-selecting-appt.png" width="100%" />
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Data Confirmation
+<img src="./readmedata/view-data-confirmation.png" width="100%" />
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Confirm
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Initial View
+<img src="./readmedata/final-view.png" width="100%" />
 
-### `yarn eject`
+## Technologies
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+React, React Query, Material UI
